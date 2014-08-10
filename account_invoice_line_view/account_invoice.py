@@ -59,21 +59,48 @@ class account_invoice_line(osv.osv):
                 }
         return res
 
+    """ return all the invoice lines for the updated invoice """
+    def _get_invoice_lines(self, cr, uid, ids, context=None):
+        invoice_line_ids = []
+        for invoice in self.browse(cr, uid, ids, context=context):
+            invoice_line_ids += self.pool.get('account.invoice.line').search(cr, uid, [('invoice_id.id', '=', invoice.id)], context=context)
+        return invoice_line_ids
 
     _order = 'id desc'
+    """ some fields are defined with 'store' for grouping purpose """
     _columns ={
                'user_id': fields.related('invoice_id','user_id',type='many2one',relation='res.users',string=u'Salesperson'),
                'number': fields.related('invoice_id','number',type='char',relation='account.move',string=u'Number'),
                # for 'state', use "type='char'" since "type='selection'" does not show any value.  How to show the correct state description (e.g. "Draft") instead of just the value kept in account_invoice table? 
-               'state': fields.related('invoice_id','state',type='char',relation='account.invoice',string=u'Status'),
-               'date_invoice': fields.related('invoice_id','date_invoice',type='date',string=u'Invoice Date'),
-               'period_id': fields.related('invoice_id','period_id',type='many2one',relation='account.period',string=u'Period'),
+               'state': fields.related('invoice_id', 'state', type='char', relation='account.invoice', string=u'Status',
+                                       store={
+                                              # update is done when 'state' of 'account.invoice' is updated
+                                              'account.invoice': (_get_invoice_lines, ['state'], 10),
+                                              }),
+               'date_invoice': fields.related('invoice_id', 'date_invoice', type='date', string=u'Invoice Date',
+                                              store={
+                                                     # update is done when 'date_invoice' of 'account.invoice' is updated
+                                                     'account.invoice': (_get_invoice_lines, ['date_invoice'], 10),
+                                                     }), # "store=True" has been added to use the field for grouping in the view
+               'period_id': fields.related('invoice_id', 'period_id', type='many2one', relation='account.period', string=u'Period'),
                'reference': fields.related('invoice_id','reference',type='char',string=u'Invoice Ref'),
                'date_due': fields.related('invoice_id','date_due',type='date',string=u'Due Date'),
                'currency_id': fields.related('invoice_id','currency_id',relation='res.currency', type='many2one',string=u'Currency'),
                'rate': fields.function(_get_base_amt, type='float', string=u'Rate', multi='base_amt'),
                'base_amt': fields.function(_get_base_amt, type='float', digits_compute=dp.get_precision('Account'), string=u'Base Amount', multi="base_amt"),
-               'partner_id': fields.related('invoice_id','partner_id',type='many2one',relation='res.partner',string=u'Customer'),
+               'partner_id': fields.related('invoice_id', 'partner_id', type='many2one', relation='res.partner', string=u'Customer',
+                                            store={
+                                                   #'account.invoice.line': (lambda self, cr, uid, ids, c={}: ids, None, 10),  #this line is probably not needed
+                                                   # update is done when 'partner_id' of 'account.invoice' is updated
+                                                   'account.invoice': (_get_invoice_lines, ['partner_id'], 10), 
+                                                   }),
                }
+
+    def init(self, cr):
+        # to be executed only when installing the module.  update "stored" fields 
+        cr.execute("update account_invoice_line line \
+                    set state = inv.state, date_invoice = inv.date_invoice, partner_id = inv.partner_id \
+                    from account_invoice inv \
+                    where line.invoice_id = inv.id")
 
 account_invoice_line()

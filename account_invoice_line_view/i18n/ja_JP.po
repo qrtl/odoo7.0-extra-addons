@@ -1,0 +1,163 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* account_invoice_line_view
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-08-10 14:11+0000\n"
+"PO-Revision-Date: 2014-08-10 14:11+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: account_invoice_line_view
+#: field:account.invoice.line,base_amt:0
+msgid "Base Amount"
+msgstr "Base Amount"
+
+#. module: account_invoice_line_view
+#: view:account.invoice.line:0
+#: field:account.invoice.line,number:0
+msgid "Number"
+msgstr "Number"
+
+#. module: account_invoice_line_view
+#: view:account.invoice.line:0
+msgid "Group By..."
+msgstr "Group By..."
+
+#. module: account_invoice_line_view
+#: view:account.invoice.line:0
+msgid "Draft"
+msgstr "Draft"
+
+#. module: account_invoice_line_view
+#: field:account.invoice.line,period_id:0
+msgid "Period"
+msgstr "Period"
+
+#. module: account_invoice_line_view
+#: view:account.invoice.line:0
+msgid "Invoice Lines"
+msgstr "Invoice Lines"
+
+#. module: account_invoice_line_view
+#: view:account.invoice.line:0
+msgid "Today"
+msgstr "Today"
+
+#. module: account_invoice_line_view
+#: view:account.invoice.line:0
+msgid "Orders processed Today or planned for Today"
+msgstr "Orders processed Today or planned for Today"
+
+#. module: account_invoice_line_view
+#: view:account.invoice.line:0
+msgid "Product"
+msgstr "Product"
+
+#. module: account_invoice_line_view
+#: view:account.invoice.line:0
+msgid "Total Amount"
+msgstr "Total Amount"
+
+#. module: account_invoice_line_view
+#: view:account.invoice.line:0
+#: field:account.invoice.line,date_invoice:0
+msgid "Invoice Date"
+msgstr "Invoice Date"
+
+#. module: account_invoice_line_view
+#: view:account.invoice.line:0
+msgid "Paid"
+msgstr "Paid"
+
+#. module: account_invoice_line_view
+#: field:account.invoice.line,user_id:0
+msgid "Salesperson"
+msgstr "Salesperson"
+
+#. module: account_invoice_line_view
+#: view:account.invoice.line:0
+msgid "draft"
+msgstr "draft"
+
+#. module: account_invoice_line_view
+#: view:account.invoice.line:0
+msgid "Customer"
+msgstr "Customer"
+
+#. module: account_invoice_line_view
+#: view:account.invoice.line:0
+#: field:account.invoice.line,state:0
+msgid "Status"
+msgstr "Status"
+
+#. module: account_invoice_line_view
+#: field:account.invoice.line,date_due:0
+msgid "Due Date"
+msgstr "Due Date"
+
+#. module: account_invoice_line_view
+#: model:ir.actions.act_window,name:account_invoice_line_view.supplier_action_invoice_line
+#: model:ir.ui.menu,name:account_invoice_line_view.supplier_invoice_line
+msgid "Supplier Invoice Lines"
+msgstr "Supplier Invoice Lines"
+
+#. module: account_invoice_line_view
+#: view:account.invoice.line:0
+msgid "Search Invoice"
+msgstr "Search Invoice"
+
+#. module: account_invoice_line_view
+#: model:ir.actions.act_window,name:account_invoice_line_view.customer_action_invoice_line
+#: model:ir.ui.menu,name:account_invoice_line_view.customer_invoice_line
+msgid "Customer Invoice Lines"
+msgstr "Customer Invoice Lines"
+
+#. module: account_invoice_line_view
+#: field:account.invoice.line,reference:0
+msgid "Invoice Ref"
+msgstr "Invoice Ref"
+
+#. module: account_invoice_line_view
+#: model:ir.model,name:account_invoice_line_view.model_account_invoice_line
+msgid "Invoice Line"
+msgstr "請求書行"
+
+#. module: account_invoice_line_view
+#: field:account.invoice.line,currency_id:0
+msgid "Currency"
+msgstr "Currency"
+
+#. module: account_invoice_line_view
+#: field:account.invoice.line,rate:0
+msgid "Rate"
+msgstr "Rate"
+
+#. module: account_invoice_line_view
+#: view:account.invoice.line:0
+msgid "Invoice"
+msgstr "Invoice"
+
+#. module: account_invoice_line_view
+#: view:account.invoice.line:0
+msgid "Cancel"
+msgstr "Cancel"
+
+#. module: account_invoice_line_view
+#: view:account.invoice.line:0
+msgid "Partner"
+msgstr "Partner"
+
+#. module: account_invoice_line_view
+#: view:account.invoice.line:0
+msgid "Open"
+msgstr "Open"
+
+

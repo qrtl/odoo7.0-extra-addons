@@ -51,7 +51,8 @@
                     	<filter string="Partner" domain="[]" context="{'group_by':'partner_id'}"/>
                     	<filter string="Product" domain="[]" context="{'group_by':'product_id'}"/>
                     	<filter string="Invoice" domain="[]" context="{'group_by':'invoice_id'}"/>
-                    	<filter string="State" domain="[]" context="{'group_by':'state'}"/>
+                    	<filter string="Invoice Date" domain="[]" context="{'group_by':'date_invoice'}"/>
+                    	<filter string="Status" domain="[]" context="{'group_by':'state'}"/>
                     </group>
                 </search>
             </field>
@@ -65,7 +66,7 @@
             <field name="view_id" ref="view_invoice_line2"/>
             <field name="search_view_id" ref="account_invoice_line_search"/>
         </record>
-		<menuitem id="customer_invoice_line" name="Customer Invoice Lines" parent="account.menu_finance_receivables" action="customer_action_invoice_line" sequence="15"/>
+		<menuitem id="customer_invoice_line" name="Customer Invoice Lines" parent="account.menu_finance_receivables" action="customer_action_invoice_line" sequence="20"/>
 
         <record model='ir.actions.act_window' id='supplier_action_invoice_line'>
             <field name="name">Supplier Invoice Lines</field>
@@ -74,7 +75,7 @@
             <field name="view_id" ref="view_invoice_line2"/>
             <field name="search_view_id" ref="account_invoice_line_search"/>
         </record>
-		<menuitem id="supplier_invoice_line" name="Supplier Invoice Lines" parent="account.menu_finance_payables" action="supplier_action_invoice_line" sequence="15"/>
+		<menuitem id="supplier_invoice_line" name="Supplier Invoice Lines" parent="account.menu_finance_payables" action="supplier_action_invoice_line" sequence="20"/>
 
 
     </data>
