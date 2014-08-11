@@ -53,11 +53,6 @@ msgstr ""
 
 #. module: account_invoice_line_view
 #: view:account.invoice.line:0
-msgid "Orders processed Today or planned for Today"
-msgstr ""
-
-#. module: account_invoice_line_view
-#: view:account.invoice.line:0
 msgid "Product"
 msgstr ""
 
@@ -147,7 +142,7 @@ msgstr ""
 
 #. module: account_invoice_line_view
 #: view:account.invoice.line:0
-msgid "Cancel"
+msgid "Cancelled"
 msgstr ""
 
 #. module: account_invoice_line_view

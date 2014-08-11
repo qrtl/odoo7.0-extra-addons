@@ -21,6 +21,7 @@
 
 from openerp.osv import fields, osv
 from datetime import datetime
+from tools.translate import _
 import openerp.addons.decimal_precision as dp
 
 class account_invoice_line(osv.osv):

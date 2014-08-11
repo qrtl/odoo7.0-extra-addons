@@ -44,9 +44,9 @@
             		<filter string="Draft" domain="[('state','=','draft')]" help="draft"/>
             		<filter string="Open" domain="[('state','not in',('done','draft','cancel'))]" help="draft"/>
             		<filter string="Paid" domain="[('state','=','done')]" help="Paid"/>
-            		<filter string="Cancel" domain="[('state','=','cancel')]" help="Cancel"/>
+            		<filter string="Cancelled" domain="[('state','=','cancel')]" help="Cancel"/>
                     <separator/>
-                    <filter icon="terp-go-today" string="Today" domain="[('date_invoice','&lt;=',time.strftime('%%Y-%%m-%%d 23:59:59')),('date_invoice','&gt;=',time.strftime('%%Y-%%m-%%d 00:00:00'))]" help="Orders processed Today or planned for Today"/>
+                    <filter icon="terp-go-today" string="Today" domain="[('date_invoice','&lt;=',time.strftime('%%Y-%%m-%%d 23:59:59')),('date_invoice','&gt;=',time.strftime('%%Y-%%m-%%d 00:00:00'))]"/>
                     <group expand="0" string="Group By...">
                     	<filter string="Partner" domain="[]" context="{'group_by':'partner_id'}"/>
                     	<filter string="Product" domain="[]" context="{'group_by':'product_id'}"/>
