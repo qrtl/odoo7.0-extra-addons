@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#    Copyright (c) Rooms For (Hong Kong) Limited T/A OSCG. All Rights Reserved.
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -44,11 +44,20 @@ class stock_projection(osv.osv_memory):
         location_id = data.get('location_id', False) and data['location_id'][0] or False
         result['context'] = str({'product_id': product_id, 'location_id': location_id})
 
-#		Update is_stock_projection flag in stock.move
         move_obj = self.pool.get('stock.move')
-        move_ids = move_obj.search(cr, uid, [('state','!=','done')], context=context)
+        
+        # set is_stock_projection to False for all records
+        move_ids = move_obj.search(cr, uid, [('is_stock_projection','!=',False)], context=context)
         self.pool.get('stock.move').write(cr, uid, move_ids, {'is_stock_projection': False}, context=context)		
+
+        # set is_stock_projection to True for records meeting the condition 
         move_ids = move_obj.search(cr, uid, [('state','!=','done'),('product_id','=',product_id),'|',('location_id','=',location_id),('location_dest_id','=',location_id)], context=context)
+        # if location_id and location_dest_id are the same (e.g. internal move record generated for MO), exclude the record from output
+        # we need to have this since adding "('location_id','!=','location_dest_id')" in the domain of above line did not work
+        for move in move_obj.browse(cr, uid, move_ids, context=context):
+            locations = move_obj.read(cr, uid, move.id, ['location_id', 'location_dest_id'])
+            if locations['location_id'] == locations['location_dest_id']:
+                move_ids.remove(move.id)
         self.pool.get('stock.move').write(cr, uid, move_ids, {'is_stock_projection': True}, context=context)
         
         return result

@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2013 Ecosoft Co., Ltd. (http://ecosoft.co.th).
+#    Copyright (c) Rooms For (Hong Kong) Limited T/A OSCG. All Rights Reserved.
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -24,20 +24,16 @@
     'version' : '1.0',
     'author': 'Rooms For (Hong Kong) Limited T/A OSCG',
     'website': 'http://www.openerp-asia.net',    
-    'summary': '',
+    'summary': 'Adds a menu item "Stock Projection"',
     'description': """
     
-Functions:
+Features:
 ==========
 
 * Adds a menu item "Stock Projection" which opens a wizard for user to select product and location.
 * Opens a list view which is based on outstanding stock move records upon confirming the wizard input.
 * The list view should show projected QOH as of the timing of future stock moves.
  
-
-Explanation:
-============
-* UOM conversion is not supported in this version.  (Sales/Purchase UOM should be the same as inventory UOM)
    
     """,
     'category': 'Warehouse Management',
