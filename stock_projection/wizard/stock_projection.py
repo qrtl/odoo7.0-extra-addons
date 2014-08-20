@@ -51,7 +51,7 @@ class stock_projection(osv.osv_memory):
         self.pool.get('stock.move').write(cr, uid, move_ids, {'is_stock_projection': False}, context=context)		
 
         # set is_stock_projection to True for records meeting the condition 
-        move_ids = move_obj.search(cr, uid, [('state','!=','done'),('product_id','=',product_id),'|',('location_id','=',location_id),('location_dest_id','=',location_id)], context=context)
+        move_ids = move_obj.search(cr, uid, [('state','not in',['done', 'cancel']),('product_id','=',product_id),'|',('location_id','=',location_id),('location_dest_id','=',location_id)], context=context)
         # if location_id and location_dest_id are the same (e.g. internal move record generated for MO), exclude the record from output
         # we need to have this since adding "('location_id','!=','location_dest_id')" in the domain of above line did not work
         for move in move_obj.browse(cr, uid, move_ids, context=context):
