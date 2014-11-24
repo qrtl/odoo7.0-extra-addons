@@ -1,5 +1,5 @@
 id,name,parent_id/id,code,notprintable,sign
-jpt_root,Japan Chart of Taxes,,,FALSE,1
+jpt_root,日本税チャート,,,FALSE,1
 jpt_tax_code_balance_net,支払対象税額,jpt_root,,FALSE,1
 jpt_tax_code_input,仮受税額,jpt_tax_code_balance_net,,FALSE,-1
 jpt_tax_code_input_A,仮受消費税(8%),jpt_tax_code_input,,FALSE,1

@@ -20,15 +20,15 @@
 ##############################################################################
 
 {
-    'name': 'Japan - Accounting for Trading/Service Industry',
-    'version': '1.1',
+    'name': 'Japan Accounting',
+    'version': '1.2',
     'category': 'Localization/Account Charts',
     'description': """
 
 Overview:
 ===============================
 
-* Chart of Accounts and Taxes template for trading/service companies in Japan.
+* Chart of Accounts and Taxes template for companies in Japan.
 * This probably does not cover all the necessary accounts for a company.  You are expected to add/delete/modify accounts based on this template.
 
     """,
