@@ -7,7 +7,7 @@
             
             <field name="arch" type="xml">
 
-                <tree string="New Sales Order Lines" editable="bottom">
+                <tree string="Sales Order Detail List" editable="bottom">
                     <field name="sequence" widget="handle"/>
                     <field name="state" />
                     <field name="th_weight" invisible="1"/>
@@ -47,7 +47,7 @@
         </record>
     
         <record id="new_action_orders" model="ir.actions.act_window">
-            <field name="name">New Sales Orders Lines</field>
+            <field name="name">Sales Order Detail List</field>
             
             <field name="res_model">sale.order.line</field>
             <field name="inherit_id" ref="sale.view_order_line_tree"/>
@@ -56,7 +56,7 @@
             
         </record>
     
-        <menuitem action="new_action_orders" name="Sales/New/New Sales Order Line" id="new_action_orders" groups="base.group_sale_salesman,base.group_sale_manager"/>
+        <menuitem action="new_action_orders" name="Sales/Detailed View/Sales Order View" id="new_action_orders" groups="base.group_sale_salesman,base.group_sale_manager"/>
         
         
 
