@@ -6,7 +6,7 @@
             <field name="name">new_purchase.order.tree</field>
             <field name="model">purchase.order.line</field>
             <field name="arch" type="xml">
-                <tree string="Purchase Order Lines" editable="bottom">
+                <tree string="Purchase Order Detail List" editable="bottom">
                     
                     <field name="order_name"/>
                     <field name="origin"/>
@@ -40,7 +40,7 @@
         
         
         <record id="new_purchase_order_line_action" model="ir.actions.act_window">
-            <field name="name">New Purchase Order Line</field>
+            <field name="name">Purchase Order Detail List</field>
             
             <field name="res_model">purchase.order.line</field>
             <field name="inherit_id" ref="purchase.purchase_order_line_tree"/>
@@ -49,6 +49,6 @@
             <field name="view_id" ref="new_purchase_order_tree"/>
             
         </record>
-        <menuitem action="new_purchase_order_line_action" id="new_menu_purchase_order_line_action" name="Purchases/New/New Purchase Order Line" sequence="6"/>
+        <menuitem action="new_purchase_order_line_action" id="new_menu_purchase_order_line_action" name="Purchases/Detailed View/Purchase Order View" sequence="6"/>
     </data>
 </openerp>
