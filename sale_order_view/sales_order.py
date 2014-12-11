@@ -18,7 +18,7 @@ from openerp.osv import fields, osv
 
 
 #class new_sale_order_tree(osv.osv):
-#    _name = 'new_sale_ordre_tree'
+#    _name = 'new_sale_order_tree'
 #    _inherit = 'res.company'
 #    _columns = {
 #                'phone': fields.char('Phone'),
