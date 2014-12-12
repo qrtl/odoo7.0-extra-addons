@@ -97,7 +97,7 @@ class new_sale_order_tree(osv.osv):
     def multi_unicost_qty(self,cr,uid,ids,name,arg,context=None):
         res = {}
         for record in self.browse(cr, uid, ids,context):
-            res[record.id] = record.uni_cost * record.product_uom_qty
+            res[record.id] = record.uni_cost * record.rate * record.product_uom_qty
         return res
     
     def base_amt(self,cr,uid,ids,name,arg,context=None):
@@ -143,7 +143,7 @@ class new_sale_order_tree(osv.osv):
                 'cost_amt':fields.function(multi_unicost_qty, type='float',string=u'Total Cost'),
                 'base_amt':fields.function(base_amt, type='float', string=u'Base Amt'),
                 'gross_profit':fields.function(gross_profit, type='float', string=u'Gross Profit'),
-                'profit':fields.function(profit, type='char', string=u'Profit%'),
+                'profit':fields.function(profit, type='float', string=u'Profit%'),
                 
                 
  #              'amount_untaxed':fields.related('order_id','amount_untaxed',type='float',string=u'Subtotal'),
