@@ -30,19 +30,21 @@ class sale_order(osv.osv):
 
     def _get_date_planned(self, cr, uid, order, line, start_date, context=None):
         categ_lt = 0
-        #categ_id = order.partner_id.category_id[0].id
-        #categ = self.pool.get('res.partner.category').browse(cr, uid, categ_id)
         categ_obj = self.pool.get('res.partner.category')
-        categ_ids = categ_obj.search(cr, uid, [])
+        categ_ids = categ_obj.search(cr, uid, [('partner_ids','in',order.partner_id.id),('scheduled_time','=',True)])
+        # in case partner is the contact person without relevant category assignment
+        if not categ_ids and order.partner_id.parent_id:
+            categ_ids = categ_obj.search(cr, uid, [('partner_ids','in',order.partner_id.parent_id.id),('scheduled_time','=',True)])
+        date_order = datetime.strptime(order.date_order, '%Y-%m-%d')
         for categ in categ_obj.browse(cr, uid, categ_ids):
             if not categ.cutoff:
                 categ_lt = categ.days_added
             else:
-                date_order = datetime.strptime(order.date_order, '%Y-%m-%d')
-                if date_order.weekday() <= categ.cutoff_day:
-                    categ_lt = categ.cutoff_day - date_order.weekday() + categ.days_added
+                cutoff_day = int(categ.cutoff_day)  # convert from char to integer
+                if date_order.weekday() <= cutoff_day:  # weekday(): 0=Monday, 6=Sunday
+                    categ_lt = cutoff_day - date_order.weekday() + categ.days_added
                 else:
-                    categ_lt = categ.cutoff_day - date_order.weekday() + 7 + categ.days_added
+                    categ_lt = cutoff_day - date_order.weekday() + 7 + categ.days_added
         return datetime.strftime(date_order + relativedelta(days=categ_lt), '%Y-%m-%d')
 
 sale_order()

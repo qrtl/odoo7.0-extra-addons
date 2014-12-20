@@ -27,7 +27,8 @@ class res_partner_category(osv.osv):
     _columns = {
         'scheduled_time': fields.boolean('Scheduled Time Proposal'),
         'cutoff': fields.boolean('Apply Cutoff Day'),
-        'cutoff_day': fields.integer('Cutoff Day'),
+        #'cutoff_day': fields.integer('Cutoff Day'),
+        'cutoff_day': fields.selection([('0','Monday'),('1','Tuesday'),('2','Wednesday'),('3','Thursday'),('4','Friday'),('5','Saturday'),('6','Sunday'),], 'Cutoff Day'),
         'days_added': fields.integer('Days to Add'),
     }
 

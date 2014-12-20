@@ -28,7 +28,8 @@
 Overview:
 ===============================
 
-* Overrides the logic of Scheduled Time proposal in Delivery Order - proposal based on customer instead of sales order line 'delay'.
+* Adds parameter fields in partner category for scheduled time proposal
+* Overrides the logic of Scheduled Time proposal in Delivery Order - proposal based on partner category instead of sales order line 'delay'.
 
     """,
     'author': 'Rooms For (Hong Kong) Limited T/A OSCG',

@@ -6,18 +6,6 @@
             <field name="model">res.partner.category</field>
             <field name="inherit_id" ref="base.view_partner_category_form"/>
             <field name="arch" type="xml">
-<!-- 
-                <field name="parent_id" position="after">
-                    <separator string="Scheduled Time Proposal"/>
-                    <group col="4">
-                        <field name="scheduled_time"/>
-                        <field name="cutoff" attrs="{'invisible':[('scheduled_time','!=',True)]}"/>
-                        <field name="cutoff_day" attrs="{'invisible':[('cutoff','!=',True)],'required':[('cutoff','=',True)]}"/>
-                        <field name="days_added" attrs="{'invisible':[('scheduled_time','!=',True)]}"/>
-                    </group>
-                </field>
- -->
-
                 <xpath expr="/form[@string='Partner Category']" position="inside">
                     <separator string="Scheduled Time Proposal"/>
                     <group>
