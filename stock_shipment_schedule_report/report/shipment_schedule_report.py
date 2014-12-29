@@ -104,18 +104,22 @@ class Parser(report_sxw.rml_parse):
         return line_title
 
     def _get_product_ids(self, cr, uid, category_id, context=None):
-        res = []
+        prod_ids = []
+        prod_tmpl_ids = []
         prod_obj = self.pool.get('product.product')
-        if category_id:  # select all the categories under the selected category including itself
-            categ = self.pool.get('product.category').browse(cr, uid, category_id)
-            min = categ.parent_left
-            max = categ.parent_right
-            res = prod_obj.search(cr, uid, [('sale_ok','=',True),('type','=','product'),('categ_id','>=',min),('categ_id','<=',max)])
+        if category_id:  # identify all the categories under the selected category including itself
+            categ_ids = [category_id]
+            for categ in categ_ids:
+                child_categ_ids = self.pool.get('product.category').search(cr, uid, [('parent_id','=',categ)])
+                if child_categ_ids:
+                    for child_categ in child_categ_ids:
+                        categ_ids.append(child_categ)
+            prod_ids = prod_obj.search(cr, uid, [('sale_ok','=',True),('type','=','product'),('categ_id','in',categ_ids)])
         else:
-            res = prod_obj.search(cr, uid, [('sale_ok','=',True),('type','=','product')])
-        if res == []:
+            prod_ids = prod_obj.search(cr, uid, [('sale_ok','=',True),('type','=','product')])
+        if prod_ids == []:
             raise osv.except_osv(_('Warning!'), _("There is no product to meet the condition (i.e. 'Saleable', 'Stockable Product' and belong to the selected Product Category or its offsprings)."))
-        return res
+        return prod_ids
  
     def _get_move_qty_data(self, cr, uid, product_ids, periods, line_vals, context=None):
         res = []
