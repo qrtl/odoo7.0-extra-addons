@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-from openerp.osv import fields
+from openerp.osv import fields, osv
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import time
@@ -7,6 +7,7 @@ from report import report_sxw
 import logging
 import pytz
 from openerp import SUPERUSER_ID
+from openerp.tools.translate import _
 
 _logger = logging.getLogger(__name__)
 
@@ -111,7 +112,9 @@ class Parser(report_sxw.rml_parse):
             max = categ.parent_right
             res = prod_obj.search(cr, uid, [('sale_ok','=',True),('type','=','product'),('categ_id','>=',min),('categ_id','<=',max)])
         else:
-            res = prod_obj.search(cr, uid, [('sale_ok','=',True)])
+            res = prod_obj.search(cr, uid, [('sale_ok','=',True),('type','=','product')])
+        if res == []:
+            raise osv.except_osv(_('Warning!'), _("There is no product to meet the condition (i.e. 'Saleable', 'Stockable Product' and belong to the selected Product Category or its offsprings)."))
         return res
  
     def _get_move_qty_data(self, cr, uid, product_ids, periods, line_vals, context=None):
