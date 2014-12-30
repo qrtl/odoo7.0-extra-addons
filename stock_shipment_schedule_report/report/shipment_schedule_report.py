@@ -123,6 +123,7 @@ class Parser(report_sxw.rml_parse):
  
     def _get_move_qty_data(self, cr, uid, product_ids, periods, line_vals, context=None):
         res = []
+        param_prod_ids = str(product_ids).replace('[', '(').replace(']', ')')  # this conversion (instead of 'tuple(product_ids,)' is in case there is only one product)
         int_loc_ids = self.pool.get('stock.location').search(cr, uid, [('usage','=','internal')])
         i = 0
         for _ in xrange(7):
@@ -130,9 +131,10 @@ class Parser(report_sxw.rml_parse):
             date_to = "'"+str(periods[i]['end'])+"'"
             for what in ['in', 'out']:
                 if what == 'in':
-                    params = ['NOT IN', tuple(int_loc_ids,), 'IN', tuple(int_loc_ids,), tuple(product_ids,), date_from, date_to]
+                    params = ['NOT IN', tuple(int_loc_ids,), 'IN', tuple(int_loc_ids,), param_prod_ids, date_from, date_to]
+                    tuple_params = tuple(params)
                 else:
-                    params = ['IN', tuple(int_loc_ids,), 'NOT IN', tuple(int_loc_ids,), tuple(product_ids,), date_from, date_to]
+                    params = ['IN', tuple(int_loc_ids,), 'NOT IN', tuple(int_loc_ids,), param_prod_ids, date_from, date_to]
                 sql = """
                     select m.product_id, sum(m.product_qty / u.factor)
                     from stock_move m
@@ -206,7 +208,7 @@ class Parser(report_sxw.rml_parse):
         for line in lines:  # only append values (without key) to form the list
             for k, v in line.iteritems():
                 res.append(v)
-        res = sorted(res, key=lambda k: k['categ'])
+        res = sorted(res, key=lambda k: (k['categ'], k['name']))
         return res
 
     def print_schedule(self, data):
