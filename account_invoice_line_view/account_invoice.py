@@ -26,7 +26,7 @@ import openerp.addons.decimal_precision as dp
 
 class account_invoice_line(osv.osv):
     _inherit = 'account.invoice.line'
-    
+        
     def _get_base_amt(self, cr, uid, ids, field_names, args, context=None):
         res = {}
         for invoice_line in self.browse(cr, uid, ids, context=context):
@@ -44,19 +44,20 @@ class account_invoice_line(osv.osv):
                     invoice_date_datetime = datetime.strptime(today, '%Y-%m-%d')
 
                 rate_obj = self.pool['res.currency.rate']
-                rate_rec = rate_obj.search(cr, uid, [
+                rate_id = rate_obj.search(cr, uid, [
                     ('currency_id', '=', invoice_line.currency_id.id),
                     ('name', '<=', invoice_date_datetime),
                     # not sure for what purpose 'currency_rate_type_id' field exists in the table, but keep this line just in case
                     ('currency_rate_type_id', '=', None)
                     ], order='name desc', limit=1, context=context)
-                if rate_rec:
-                    rate = rate_obj.read(cr, uid, rate_rec[0], ['rate'], context=context)['rate']
+                if rate_id:
+#                     rate = rate_obj.read(cr, uid, rate_rec[0], ['rate'], context=context)['rate']
+                    rate = rate_obj.browse(cr, uid, rate_id, context=context)[0].rate
                 else:
                     rate = 1.0
             res[invoice_line.id] = {
                 'rate': rate,
-                'base_amt': curr_amt/rate,
+                'base_amt': curr_amt / rate,
                 }
         return res
 
@@ -74,15 +75,15 @@ class account_invoice_line(osv.osv):
                'number': fields.related('invoice_id','number',type='char',relation='account.move',string=u'Number'),
                # for 'state', use "type='char'" since "type='selection'" does not show any value.  How to show the correct state description (e.g. "Draft") instead of just the value kept in account_invoice table? 
                'state': fields.related('invoice_id', 'state', type='char', relation='account.invoice', string=u'Status',
-                                       store={
-                                              # update is done when 'state' of 'account.invoice' is updated
-                                              'account.invoice': (_get_invoice_lines, ['state'], 10),
-                                              }),
+                   store={
+                          'account.invoice.line': (lambda self, cr, uid, ids, c={}: ids, [], 10),
+                          'account.invoice': (_get_invoice_lines, ['state'], 10),  # update is done when 'state' of 'account.invoice' is updated
+                          }),
                'date_invoice': fields.related('invoice_id', 'date_invoice', type='date', string=u'Invoice Date',
-                                              store={
-                                                     # update is done when 'date_invoice' of 'account.invoice' is updated
-                                                     'account.invoice': (_get_invoice_lines, ['date_invoice'], 10),
-                                                     }), # "store=True" has been added to use the field for grouping in the view
+                   store={
+                          'account.invoice.line': (lambda self, cr, uid, ids, c={}: ids, [], 10),
+                          'account.invoice': (_get_invoice_lines, ['date_invoice','state'], 10),  # update is done when 'date_invoice' of 'account.invoice' is updated
+                          }),
                'period_id': fields.related('invoice_id', 'period_id', type='many2one', relation='account.period', string=u'Period'),
                'reference': fields.related('invoice_id','reference',type='char',string=u'Invoice Ref'),
                'date_due': fields.related('invoice_id','date_due',type='date',string=u'Due Date'),
@@ -90,11 +91,10 @@ class account_invoice_line(osv.osv):
                'rate': fields.function(_get_base_amt, type='float', string=u'Rate', multi='base_amt'),
                'base_amt': fields.function(_get_base_amt, type='float', digits_compute=dp.get_precision('Account'), string=u'Base Amount', multi="base_amt"),
                'partner_id': fields.related('invoice_id', 'partner_id', type='many2one', relation='res.partner', string=u'Customer',
-                                            store={
-                                                   #'account.invoice.line': (lambda self, cr, uid, ids, c={}: ids, None, 10),  #this line is probably not needed
-                                                   # update is done when 'partner_id' of 'account.invoice' is updated
-                                                   'account.invoice': (_get_invoice_lines, ['partner_id'], 10), 
-                                                   }),
+                   store={
+                          'account.invoice.line': (lambda self, cr, uid, ids, c={}: ids, [], 10),
+                          'account.invoice': (_get_invoice_lines, ['partner_id','state'], 10),  # update is done when 'partner_id' of 'account.invoice' is updated
+                          }),
                }
 
     def init(self, cr):
