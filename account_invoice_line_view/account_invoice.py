@@ -27,6 +27,18 @@ import openerp.addons.decimal_precision as dp
 class account_invoice_line(osv.osv):
     _inherit = 'account.invoice.line'
         
+#     def _get_invoice_vals(self, cr, uid, ids, field_names, args, context=None):
+#         res = {}
+#         inv_obj = self.pool.get('account.invoice')
+#         for line in self.browse(cr, uid, ids, context=context):
+#             for invoice in inv_obj.browse(cr, uid, [line.invoice_id], context=context):
+#                 res[line.id] = {
+#                     'state': invoice.state,
+#                     'date_invoice': invoice.date_invoice,
+#                     'partner_id': invoice.partner_id,
+#                     }
+#         return res
+    
     def _get_base_amt(self, cr, uid, ids, field_names, args, context=None):
         res = {}
         for invoice_line in self.browse(cr, uid, ids, context=context):
@@ -71,31 +83,47 @@ class account_invoice_line(osv.osv):
     _order = 'id desc'
     """ some fields are defined with 'store' for grouping purpose """
     _columns ={
-               'user_id': fields.related('invoice_id','user_id',type='many2one',relation='res.users',string=u'Salesperson'),
-               'number': fields.related('invoice_id','number',type='char',relation='account.move',string=u'Number'),
-               # for 'state', use "type='char'" since "type='selection'" does not show any value.  How to show the correct state description (e.g. "Draft") instead of just the value kept in account_invoice table? 
-               'state': fields.related('invoice_id', 'state', type='char', relation='account.invoice', string=u'Status',
-                   store={
-                          'account.invoice.line': (lambda self, cr, uid, ids, c={}: ids, [], 10),
-                          'account.invoice': (_get_invoice_lines, ['state'], 10),  # update is done when 'state' of 'account.invoice' is updated
-                          }),
-               'date_invoice': fields.related('invoice_id', 'date_invoice', type='date', string=u'Invoice Date',
-                   store={
-                          'account.invoice.line': (lambda self, cr, uid, ids, c={}: ids, [], 10),
-                          'account.invoice': (_get_invoice_lines, ['date_invoice','state'], 10),  # update is done when 'date_invoice' of 'account.invoice' is updated
-                          }),
-               'period_id': fields.related('invoice_id', 'period_id', type='many2one', relation='account.period', string=u'Period'),
-               'reference': fields.related('invoice_id','reference',type='char',string=u'Invoice Ref'),
-               'date_due': fields.related('invoice_id','date_due',type='date',string=u'Due Date'),
-               'currency_id': fields.related('invoice_id','currency_id',relation='res.currency', type='many2one',string=u'Currency'),
-               'rate': fields.function(_get_base_amt, type='float', string=u'Rate', multi='base_amt'),
-               'base_amt': fields.function(_get_base_amt, type='float', digits_compute=dp.get_precision('Account'), string=u'Base Amount', multi="base_amt"),
-               'partner_id': fields.related('invoice_id', 'partner_id', type='many2one', relation='res.partner', string=u'Customer',
-                   store={
-                          'account.invoice.line': (lambda self, cr, uid, ids, c={}: ids, [], 10),
-                          'account.invoice': (_get_invoice_lines, ['partner_id','state'], 10),  # update is done when 'partner_id' of 'account.invoice' is updated
-                          }),
-               }
+        'user_id': fields.related('invoice_id','user_id',type='many2one',relation='res.users',string=u'Salesperson'),
+        'number': fields.related('invoice_id','number',type='char',relation='account.move',string=u'Number'),
+        # for 'state', use "type='char'" since "type='selection'" does not show any value.  How to show the correct state description (e.g. "Draft") instead of just the value kept in account_invoice table? 
+#         'state': fields.function(_get_invoice_vals, type='char', string=u'Status', multi='invoice_vals',
+#             store={
+#                    'account.invoice.line': (lambda self, cr, uid, ids, c={}: ids, [], 10),
+#                    'account.invoice': (_get_invoice_lines, ['state'], 10),  # update is done when 'state' of 'account.invoice' is updated
+#                    }),
+#         'date_invoice': fields.function(_get_invoice_vals, type='date', string=u'Invoice Date', multi='invoice_vals',
+#             store={
+#                    'account.invoice.line': (lambda self, cr, uid, ids, c={}: ids, [], 10),
+#                    'account.invoice': (_get_invoice_lines, ['date_invoice'], 10),  # update is done when 'date_invoice' of 'account.invoice' is updated
+#                    }),
+        'state': fields.related('invoice_id', 'state', type='char', relation='account.invoice', string=u'Status',
+            store={
+#                    'account.invoice.line': (lambda self, cr, uid, ids, c={}: ids, [], 10),  # this does not seem to have any effect
+                   'account.invoice': (_get_invoice_lines, ['state'], 10),  # update is done when 'state' of 'account.invoice' is updated
+                   }),
+        'date_invoice': fields.related('invoice_id', 'date_invoice', type='date', string=u'Invoice Date',
+            store={
+#                    'account.invoice.line': (lambda self, cr, uid, ids, c={}: ids, [], 10),  # this does not seem to have any effect
+                   'account.invoice': (_get_invoice_lines, ['date_invoice','state'], 10),  # include 'state' to make sure update is triggered at invoice validation 
+                   }),
+        'period_id': fields.related('invoice_id', 'period_id', type='many2one', relation='account.period', string=u'Period'),
+        'reference': fields.related('invoice_id','reference',type='char',string=u'Invoice Ref'),
+        'date_due': fields.related('invoice_id','date_due',type='date',string=u'Due Date'),
+        'currency_id': fields.related('invoice_id','currency_id',relation='res.currency', type='many2one',string=u'Currency'),
+        'rate': fields.function(_get_base_amt, type='float', string=u'Rate', multi='base_amt'),
+        'base_amt': fields.function(_get_base_amt, type='float', digits_compute=dp.get_precision('Account'), string=u'Base Amount', multi="base_amt"),
+#                'date_invoice': fields.functional(_get_invoice_vals, type='date', string=u'Invoice Date', multi='invoice_vals',
+#         'partner_id': fields.function(_get_invoice_vals, type='many2one', relation='res.partner', string=u'Customer', multi='invoice_vals',
+#             store={
+#                    'account.invoice.line': (lambda self, cr, uid, ids, c={}: ids, [], 10),
+#                    'account.invoice': (_get_invoice_lines, ['partner_id'], 10),  # update is done when 'partner_id' of 'account.invoice' is updated
+#                    }),
+        'partner_id': fields.related('invoice_id', 'partner_id', type='many2one', relation='res.partner', string=u'Customer',
+            store={
+#                    'account.invoice.line': (lambda self, cr, uid, ids, c={}: ids, [], 10),  # this does not seem to have any effect
+                   'account.invoice': (_get_invoice_lines, ['partner_id','state'], 10),  # include 'state' to make sure update is triggered at invoice validation
+                   }),
+        }
 
     def init(self, cr):
         # to be executed only when installing the module.  update "stored" fields 
